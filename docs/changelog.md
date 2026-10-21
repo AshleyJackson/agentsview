@@ -9,6 +9,9 @@ The latest release is
 
 ## Unreleased
 
+- Telemetry now honors `DO_NOT_TRACK` and stays off in CI and non-release
+  builds.
+
 **Upgrade notes**
 
 - On Windows, stop the daemon before switching back to 0.45.0 or earlier.

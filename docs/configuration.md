@@ -2340,10 +2340,11 @@ information, or hostname, and the events are sent with person-profile processing
 and GeoIP lookup disabled. The ping runs in the background and never blocks
 startup or operation.
 
-Disable it with an environment variable:
+Only release builds send telemetry, and it stays off in CI. Disable it with an
+environment variable, then restart the server:
 
 ```bash
-export AGENTSVIEW_TELEMETRY_ENABLED=0
+export AGENTSVIEW_TELEMETRY_ENABLED=0  # or DO_NOT_TRACK=1
 ```
 
 This disables outbound telemetry, not the installation identity used for local
