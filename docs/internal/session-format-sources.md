@@ -4218,11 +4218,45 @@ schemas keep their existing ordering behavior.
   `<session-id>.jsonl`. This is a user-reported local observation, not
   producer-side evidence, and does not establish storage behavior for all
   Qoder CN releases or platforms.
+- **Title evidence:** Both macOS builds keep session titles in a `chat_sessions`
+  table inside the app's Electron user-data database:
+  `~/Library/Application Support/com.qoder.app.stable/main.sqlite` titles
+  `~/.qoder/projects`, and `…com.qodercn.app.stable/main.sqlite` titles
+  `~/.qoder-cn/projects`. `chat_sessions.session_id` is the transcript file's
+  name without `.jsonl`. The table has more columns than Agentsview reads, and
+  the two builds' column sets differ, so only `session_id` and `title` are
+  selected. The database is read with ordinary read-only locking, like every
+  other live app database. The installed-app schema and paths above are
+  single-machine user-side observations, not producer-side evidence, and do
+  not establish behavior for other Qoder releases. A root is bound to its
+  database only by a canonical absolute home-anchored path. Each title lookup
+  resolves the default-root symlinks to match the configured canonical root.
+  Transcript membership is lexical under either the unresolved or resolved
+  default root. No title store is confirmed for `~/.qoderwork/projects` or the
+  three `SharedClientCache/cli/projects` roots. See the
+  [usage guide](https://agentsview.io/docs/usage/#session-browser) for title
+  precedence and sync behavior.
+- **Title store on Linux and Windows:** The Linux package
+  `https://download.qoder.com/qoder-app/releases/latest/Qoder-linux-amd64.deb`
+  (version 0.4.9, inspected 2026-10-22 without running it) ships
+  `resources/product.json` with `"dataDirectoryName": "com.qoder.app.stable"`.
+  Its Electron bundle names `main.sqlite` and `chat_sessions` and resolves
+  `appData` with `XDG_CONFIG_HOME`, `.config`, and `APPDATA`. A
+  [Qoder forum report](https://forum.qoder.com/t/qoder/12133) for Qoder CN
+  0.1.0 on Windows gives the data path as `%APPDATA%\com.qodercn.app.stable\`.
+  Agentsview therefore resolves the store under Electron's `appData`
+  directory, which `os.UserConfigDir` matches: `$XDG_CONFIG_HOME` or
+  `~/.config` on Linux and `%APPDATA%` on Windows. The Linux path is inferred
+  from the package and the Electron convention, not observed on an installed
+  machine. The bundle also lets a user move the data directory, and Agentsview
+  does not follow a moved directory.
 - **Usage and cost:** The consumed files provide transcript and model/session
   metadata but no authoritative token, cache, reasoning, credit, or USD events
   to Agentsview.
 - **Agentsview:** `internal/parser/qoder.go` and
-  `internal/parser/qoder_provider.go`.
+  `internal/parser/qoder_provider.go`, with titles read through
+  `internal/parser/qoder_titles.go` and applied per sync pass in
+  `internal/sync/native_titles.go`.
 
 ## QwenPaw (`qwenpaw`)
 

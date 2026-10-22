@@ -425,6 +425,25 @@ Antigravity sessions show the conversation title Antigravity saves in
 `conversation_summaries.db`. Renames appear shortly after that file changes,
 or on the next `agentsview sync`. Names set in AgentsView still win.
 
+Qoder's database title lookup applies to `~/.qoder/projects` and
+`~/.qoder-cn/projects`. The Qoder app stores titles in `main.sqlite` under
+its data directory: `com.qoder.app.stable` (or `com.qodercn.app.stable` for
+Qoder CN) inside `~/Library/Application Support` on macOS,
+`$XDG_CONFIG_HOME` or `~/.config` on Linux, and `%APPDATA%` on Windows. If
+you moved the app's data directory, AgentsView does not find it. Names take
+precedence in this order:
+
+1. A name set in AgentsView.
+2. A non-blank database title.
+3. A file-side name, with a sidecar title ahead of an in-chat rename.
+
+Renames appear at the next sync pass: a watched change in any agent root,
+manual `agentsview sync`, or startup. For these two roots, blank database
+titles or read errors preserve the archived name. A missing database, schema,
+or session row uses non-empty file-side names; an empty file-side name
+preserves the archived title. Other Qoder roots use file-side names, including
+clearing the archived title when empty.
+
 When a session has a native resume target, the sidebar also exposes a direct
 native session link so supported agents can reopen their own session instead of
 only navigating inside AgentsView.

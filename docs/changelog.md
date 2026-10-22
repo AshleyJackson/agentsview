@@ -132,6 +132,9 @@ The latest release is
 - Antigravity sessions show the conversation title Antigravity saves in
   `conversation_summaries.db`, and follow renames there, including for
   conversations whose transcript is gone. Names set in AgentsView still win.
+- Qoder sessions show the title the Qoder app saves in its application
+  database, including sessions already archived. Renames appear at the next
+  sync pass.
 - Import ChatGPT dot, Codex web, and Codex cloud task chats that live only on
   OpenAI's servers. Turn it on with `[agents.codex-cloud] enabled = true` in
   `config.toml`; it uses the ChatGPT login of your local Codex homes. Live
