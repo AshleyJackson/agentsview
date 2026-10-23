@@ -3512,6 +3512,23 @@ schemas keep their existing ordering behavior.
   under the Hermes folder (`state.db`, `state.db-wal`, `sessions/<name>`)
   rather than its absolute local path, so an archive unpacked into a fresh
   folder keeps its fingerprints (`TestHermesFingerprintsIgnoreTheLocalFolder`).
+- **Model usage check (2026-10-22):**
+  [hermes_state_usage.py](https://github.com/NousResearch/hermes-agent/blob/3ba2b0787ed3a73ec3b08085ed0137f235209cf4/hermes_state_usage.py)
+  records per-model and billing-route deltas in `session_model_usage`.
+  Task-empty and `voice_chat` rows also update the session summary. Auxiliary
+  tasks, including background review and title generation, update only the
+  ledger. Cumulative gateway updates write only the summary. Agentsview counts
+  ledger rows plus each token bucket's uncovered summary remainder, so calls
+  count once and keep their recorded model. Missing ledgers retain summary
+  accounting; ledgers without `task` describe main usage. Member fingerprints
+  include ordered ledger keys and accounting fields for both Hermes and
+  Augure Desktop. Reverified the producer's delta transaction: main ledger
+  costs use the summary's cost basis, leaving only positive uncovered cost
+  on its model. Unknown summary cost preserves known ledger costs and lets
+  catalog pricing fill unknown costs. Sourced actual and included zeros remain
+  known; default zero estimates remain unknown. Malformed numeric rows warn and
+  are omitted, preserving valid rows and leaving uncovered main usage in the
+  session summary. Nullable ledger token counters count as zero.
 - **Usage and cost:** State records distinguish input, output, cache-read,
   cache-write, and reasoning tokens and can retain estimated or actual cost
   with status/source metadata. Agentsview uses provider-reported cost when it
