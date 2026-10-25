@@ -11,6 +11,12 @@ The latest release is
 
 **New features**
 
+- PostgreSQL and ClickHouse push services can use a separately managed
+  collector with `service install --no-start-daemon`, avoiding competing daemons
+  and archive write locks during restarts. The push service exits if no writable
+  daemon is running, and the service manager restarts it until the collector
+  answers. Reinstalling restarts the service with the new arguments.
+
 - When Friction Log review is enabled, AgentsView stores daily digests and
   catches up on completed days missed while offline, including sessions that
   arrive late within the configured backfill window. Digests retain findings,
