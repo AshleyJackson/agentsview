@@ -313,8 +313,9 @@ type VectorEmbeddingsServerConfig struct {
 	// 0 means one attempt. Default 3.
 	MaxRetries int `toml:"max_retries" json:"max_retries"`
 
-	// apiKey is read from AGENTSVIEW_EMBEDDINGS_API_KEY_FILE for the
-	// deployment server; it takes precedence over APIKeyEnv.
+	// apiKey is read from AGENTSVIEW_EMBEDDINGS_API_KEY or
+	// AGENTSVIEW_EMBEDDINGS_API_KEY_FILE for the deployment server; it takes
+	// precedence over APIKeyEnv.
 	apiKey string
 }
 
@@ -533,8 +534,8 @@ func (c VectorEmbeddingsServerConfig) EmbedTransport() (embedconfig.Transport, e
 	return embedconfig.Transport{Timeout: timeout}, nil
 }
 
-// APIKey returns the key read from a deployment secret file, else the
-// environment variable named by APIKeyEnv. Returns "" when neither is set.
+// APIKey returns a deployment-provided key when set. Otherwise it reads the
+// environment variable named by APIKeyEnv, returning "" when unset.
 func (c VectorEmbeddingsServerConfig) APIKey() string {
 	if c.apiKey != "" {
 		return c.apiKey
