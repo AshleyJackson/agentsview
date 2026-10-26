@@ -34,9 +34,16 @@ ancestor permissions satisfy their checks.
 
 - Build with `CGO_ENABLED=1`; the SQLite driver requires CGO.
 - Use the `fts5` build tag for full-text search.
-- Do not add the `kit_posthog_disabled` tag to `go test`. The telemetry reporter
-  disables itself under `testing.Testing()`. E2E binaries run as real
-  processes, so their build keeps the tag.
+- The Makefile's `LDFLAGS` set the PostHog project key with
+  `-X go.kenn.io/kit/telemetry/posthog.projectKey`. Builds without it send no
+  telemetry, so keep it out of test and e2e builds.
+- `DISTRIBUTION` sets `main.distribution` and
+  `go.kenn.io/kit/telemetry/posthog.distribution` to who ships the binary.
+  Official direct downloads use `kenn` and keep self-updating, like builds
+  with no value. Any other value names a package manager: those builds refuse
+  `agentsview update` installs and point users at the package manager.
+  `make homebrew` is the release build with `DISTRIBUTION=homebrew`, written
+  to `$(BINDIR)/agentsview`.
 
 ## Frontend
 

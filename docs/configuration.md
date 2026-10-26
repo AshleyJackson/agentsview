@@ -2420,6 +2420,8 @@ text, paths, and identifiers stay out of outcome properties.
 Every event contains only:
 
 - app version and git commit
+- the distribution that built the binary, such as `homebrew` for Homebrew or
+  `kenn` for official downloads; empty for source builds
 - operating system and CPU architecture
 - the application-owned installation ID stored in
   `~/.agentsview/telemetry-install-id`
@@ -2433,8 +2435,11 @@ information, or hostname, and the events are sent with person-profile processing
 and GeoIP lookup disabled. The ping runs in the background and never blocks
 startup or operation.
 
-Only release builds send telemetry, and it stays off in CI. Disable it with an
-environment variable, then restart the server:
+A build sends telemetry only when it has the PostHog project key and a release
+version such as `0.33.0`. Release builds and the `make` build targets set the key
+at link time. Plain `go build` and `go test` binaries have no key and send
+nothing. Telemetry also stays off in CI. Disable it with an environment
+variable, then restart the server:
 
 ```bash
 export AGENTSVIEW_TELEMETRY_ENABLED=0  # or DO_NOT_TRACK=1

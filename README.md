@@ -831,12 +831,15 @@ name), each with one value from a fixed list in the server that drops anything
 else. All events use a stable random install ID as the event `DistinctId`.
 [Feature outcomes](docs/configuration.md#anonymous-daemon-telemetry) also count
 empty searches, visible errors, and failed sync attempts. The events include
-`application=agentsview`, app version, commit, OS, and CPU architecture, with
+`application=agentsview`, app version, commit, distribution (such as `homebrew`;
+empty for source builds), OS, and CPU architecture, with
 `$process_person_profile=false` and `$geoip_disable=true`. It does not include
 session, project, prompt, file path, account, or machine identity. Disable
 telemetry with `AGENTSVIEW_TELEMETRY_ENABLED=0`, `TELEMETRY_ENABLED=0`, or
-`DO_NOT_TRACK=1`. Only release builds send telemetry, and it stays off in CI and
-Go test binaries.
+`DO_NOT_TRACK=1`. A build sends telemetry only when it has the PostHog project
+key and a release version such as `0.33.0`. Release builds and the `make` build
+targets set the key at link time. Plain `go build` and `go test` binaries have
+no key and send nothing. Telemetry also stays off in CI.
 
 All session data stays on your machine. The server binds to `127.0.0.1` by
 default. The update check is optional and can be disabled with
