@@ -2986,7 +2986,17 @@ schemas keep their existing ordering behavior.
     `d743267388641bc76f17c45ce8b4c231aed1d32c`, retains generation 4 and adds
     [working-directory changes](https://github.com/deepseek-ai/deepseek-harness/blob/d743267388641bc76f17c45ce8b4c231aed1d32c/packages/session/working-directory/src/index.ts),
     also metadata; the producer separately emits readable directory-change
-    text.
+    text. Release `dsh-v0.2.1-alpha.3`, commit
+    `2fbf4359b82fb94c03dcce0b831660d87f12ea5c`, retains generation 4 and adds
+    paired `job/registered` and `job/settled` events for jobs such as shell
+    commands. Release `dsh-v0.2.1-rc.2`, commit
+    `687f282e8625c6b8d11ff58211a90524be2e4317`, defines them as log-only
+    [job lifecycle records](https://github.com/deepseek-ai/deepseek-harness/blob/687f282e8625c6b8d11ff58211a90524be2e4317/packages/jobs/jobs/src/types.ts)
+    in its
+    [known event types](https://github.com/deepseek-ai/deepseek-harness/blob/687f282e8625c6b8d11ff58211a90524be2e4317/packages/core/session/src/known-event-types.ts).
+    They carry job identity, the creating tool call, timing, and the terminal
+    status, but no model-visible output, so they are metadata. The tool output
+    remains in the paired `tool/result`.
 
 - **Usage and cost:** Each model response and summarizing compaction can persist
   disjoint input, output, cache-read, cache-write, and reasoning token counts.
