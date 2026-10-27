@@ -69,6 +69,8 @@ The latest release is
   empty thinking block. These responses still show nothing in the transcript,
   but their usage was dropped. Existing Claude-format sources are reprocessed on
   upgrade to recover it.
+- Links with bare session UUIDs from Pi, OMP, Codex and other tools now open
+  matching sessions. Ambiguous IDs still require the full session ID.
 - When an upgrade leaves the archive needing a full rebuild, the **Sync**
   button now runs that rebuild on every server, and the status bar shows when a
   sync fails instead of staying silent. A rebuild that does not finish is
